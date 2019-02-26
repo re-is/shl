@@ -3,7 +3,7 @@
 	Super HTA Library CSS code
 	______________________________________
 	Creator: István Reich
-	Latest update: 2019.02.09
+	Latest update: 2019.02.26
 	--------------------------------------
 	Don't change the "in-line" properties!
 
@@ -72,13 +72,14 @@ body {margin:0;overflow:hidden}
 		/* Overwritable */
 		padding: 10px;
 		border-radius: 3px;
-		box-shadow: 0 0 30px #555;
+		box-shadow: 0 0 30px rgba(0,0,0,0.4);
 		background-color: #fff;
 	}
 
 		#shl-msgbox-textarea {width:100%;height:auto;box-sizing:border-box;overflow:auto;
 			/* Overwritable */
-			background: transparent;
+			background-color: transparent;
+			color: #333;
 			border: none;
 		}
 
@@ -88,7 +89,7 @@ body {margin:0;overflow:hidden}
 			border-radius: 3px;
 			color: #333;
 			padding: 3px 10px;
-			transition: 0.5s;
+			transition: 0.3s;
 		}
 
 			.shl-msgbox-buttons:hover {
