@@ -3,7 +3,7 @@
 	Super HTA Library CSS source
 	______________________________________
 	Creator: István Reich
-	Latest update: 2019.Mar.01
+	Latest update: 2019.Mar.11
 	--------------------------------------
 	Don't change the properties in row !
 
@@ -301,7 +301,7 @@ body {margin:0;overflow:hidden}
 
 .shl-touch-buttons {position:relative;overflow:hidden}
 
-.shl-touch-effect::before {
-	/* Overwritable */
-	background-color: #eee;
-}
+	.shl-touch-effect::before {
+		background-color: #eee;
+		border: none;
+	}
