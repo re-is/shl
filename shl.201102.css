@@ -1,0 +1,307 @@
+/*******************************************
+
+	Super HTA Library CSS source
+	______________________________________
+	Creator: István Reich
+	Latest update: 2019.Mar.11
+	--------------------------------------
+	Don't change the properties in row !
+
+*******************************************/
+
+body {margin:0;overflow:hidden}
+
+/*******************************************
+
+	Logline
+
+*******************************************/
+
+#shl-logline-panel {position:absolute;box-sizing:border-box;z-index:9999999}
+
+	#shl-logline-textarea {-ms-user-select:none;border:none;cursor:default;overflow:hidden;padding:2px 4px;width:calc(100% - 8px);height:calc(100% - 4px);
+		/* Overwritable */
+		font-family: "Consolas", "Courier New";
+		font-size: 15px;
+		color: #eee;
+		background-color: #456;
+	}
+
+	#shl-logline-delete {position:absolute;display:none;right:3px;bottom:3px;
+		/* Overwritable */
+		font-family: "Verdana";
+		font-size: 16px;
+		padding: 2px 7px;
+		color: #222;
+		border-radius: 2px;
+		background-color: #aaa;
+	}
+
+		#shl-logline-delete:hover {
+			/* Overwritable */
+			background-color: #d22;
+			cursor: pointer;
+			color: #fff;
+		}
+
+	#shl-logline-paused {position:absolute;display:none;font-family:"Verdana";font-size:14px;left:0;bottom:0;padding:0 5px;color:#fff;background-color:#d22}
+
+/*******************************************
+
+	Fadein
+
+*******************************************/
+
+#shl-fadein-layer {position:absolute;top:0;left:0;right:0;bottom:0;z-index:9999998;
+	/* Overwritable */
+	background-color: #000;
+}
+
+/*******************************************
+
+	MsgBox
+
+*******************************************/
+
+#shl-msgbox-layer {position:absolute;display:none;top:0;left:0;right:0;bottom:0;z-index:9999997;
+	/* Overwritable */
+	background-color: rgba(0,0,0,0.4);
+}
+
+	#shl-msgbox-dialog {width:100%;height:auto;text-align:right;
+		/* Overwritable */
+		padding: 10px;
+		border-radius: 3px;
+		box-shadow: 0 0 30px rgba(0,0,0,0.4);
+		background-color: #fff;
+	}
+
+		#shl-msgbox-textarea {width:100%;height:auto;box-sizing:border-box;overflow:auto;
+			/* Overwritable */
+			background-color: transparent;
+			color: #333;
+			border: none;
+		}
+
+		.shl-msgbox-buttons {display:none;margin-top:5px;margin-left:5px;
+			/* Overwritable */
+			background-color: #ddd;
+			border-radius: 3px;
+			color: #333;
+			padding: 3px 10px;
+			transition: 0.3s;
+		}
+
+			.shl-msgbox-buttons:hover {
+				/* Overwritable */
+				background-color: #38e;
+				color: #fff;
+				cursor: pointer;
+				transition: 0s;
+			}
+
+			.shl-msgbox-buttons:active {
+				background-color: #26a;
+				color: #fff;
+			}
+
+/*******************************************
+
+	CheckBox
+
+*******************************************/
+
+.shl-cb-labels {position:relative;cursor:pointer;
+	/* Overwritable */
+	padding-left: 23px;
+}
+
+/* Default */
+.shl-cb-labels .shl-cb {position:absolute;box-sizing:border-box;
+	/* Overwritable */
+	top: 2px;
+	left: 2px;
+	bottom: 2px;
+	width: 18px;
+	background-color: #fff;
+	border: 1px solid #888;
+	border-radius: 4px;
+	transition: 0.2s;
+}
+
+	/* Default:hover */
+	.shl-cb-labels:hover .shl-cb {
+		background-color: #38e;
+		border-color: #38e;
+	}
+
+/* Checked */
+.shl-cb-labels input:enabled:checked ~ .shl-cb {
+	background-color: #38e;
+	border-color: #38e;
+}
+
+	/* Checked:hover */
+	.shl-cb-labels:hover input:enabled:checked ~ .shl-cb {
+		background-color: #79f;
+		border-color: #79f;
+	}
+
+/* Disabled */
+.shl-cb-labels input:disabled ~ .shl-cb {
+	background-color: #aaa;
+	border-color: #888;
+}
+
+/* Active */
+.shl-cb-labels:active .shl-cb, .shl-cb-labels .shl-cb:active, .shl-cb-labels:active input:enabled:checked ~ .shl-cb, .shl-cb-labels input:enabled:checked ~ .shl-cb:active {
+	background-color: #26a;
+	border-color: #26a;
+}
+
+/* Pipe symbol */
+.shl-cb-labels .shl-cb::after {content:"";position:absolute;transform:rotate(40deg);border-style:solid;border-width:0;opacity:0;
+	/* Overwritable */
+	top: 1px;
+	left: 4px;
+	width: 5px;
+	height: 9px;
+	border-color: #fff;
+	border-right-width: 3px;
+	border-bottom-width: 3px;
+}
+
+.shl-cb-labels input:checked ~ .shl-cb::after {opacity:1}
+
+/*******************************************
+
+	RadioButton
+
+*******************************************/
+
+.shl-rb-labels {position:relative;cursor:pointer;
+	/* Overwritable */
+	padding-left: 23px;
+}
+
+/* Default */
+.shl-rb-labels .shl-rb {position:absolute;box-sizing:border-box;
+	/* Overwritable */
+	top: 2px;
+	left: 2px;
+	bottom: 2px;
+	width: 18px;
+	background-color: #fff;
+	border: 1px solid #888;
+	border-radius: 50%;
+	transition: 0.2s;
+}
+
+	/* Default:hover */
+	.shl-rb-labels:hover .shl-rb {
+		background-color: #38e;
+		border-color: #38e;
+	}
+
+/* Checked */
+.shl-rb-labels input:checked ~ .shl-rb {
+	background-color: #fff;
+	border-color: #38e;
+	border-width: 5px;
+}
+
+	/* Checked:hover */
+	.shl-rb-labels:hover input:enabled:checked ~ .shl-rb {
+		background-color: #fff;
+		border-color: #79f;
+		border-width: 5px;
+	}
+
+/* Disabled */
+.shl-rb-labels input:disabled ~ .shl-rb {
+	background-color: #ccc;
+	border-color: #888;
+}
+
+/* Active */
+.shl-rb-labels:active .shl-rb, .shl-rb-labels .shl-rb:active, .shl-rb-labels:active input:enabled:checked ~ .shl-rb, .shl-rb-labels input:enabled:checked ~ .shl-rb:active {
+	background-color: #26a;
+	border-color: #26a;
+}
+
+/*******************************************
+
+	Selectors
+
+*******************************************/
+
+/* Selectors */
+.shl-selectors {position:relative;display:inline-block;box-sizing:border-box;vertical-align:middle;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;cursor:pointer;
+	/* Overwritable */
+	width: 150px;
+	text-align: center;
+	background-color: #fff;
+	border: 1px solid #aaa;
+	border-radius: 3px;
+	padding-left: 2px;
+	padding-right: 10px;
+}
+
+	/* Disabled selectors */
+	.shl-selectors.disabled {cursor:default;
+		background-color: #ddd;
+	}
+
+	/* Arrow symbol */
+	.shl-selectors::after {content:"";position:absolute;transform:rotate(45deg);
+		/* Overwritable */
+		width: 0.3em;
+		height: 0.3em;
+		top: 0.3em;
+		right: 0.3em;
+		border: 2px solid #888;
+		border-top: 0;
+		border-left: 0;
+	}
+
+		.shl-selectors:hover::after {
+			border-color: #38e;
+		}
+
+			.shl-selectors.disabled::after {
+				border-color: transparent;
+			}
+
+	/* Drop-down lists */
+	.shl-selector-lists {position:absolute;display:none;box-sizing:border-box;z-index:9999996;
+		/* Overwritable */
+		padding: 4px;
+		background-color: #fff;
+		box-shadow: 0 0 14px #777;
+	}
+
+		/* Items */
+		.shl-list-items {
+			padding:  2px 10px;
+			text-align: center;
+			border-radius: 3px;
+		}
+
+			.shl-list-items:hover {
+				background-color: #38e;
+				cursor: pointer;
+				color: #fff;
+			}
+
+/*******************************************
+
+	Touch effect
+
+*******************************************/
+
+.shl-touch-buttons {position:relative;overflow:hidden}
+
+	.shl-touch-effect::before {
+		background-color: #eee;
+		border: none;
+	}
