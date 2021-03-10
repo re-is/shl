@@ -116,7 +116,7 @@ function createLineGraph(param) {
 					}
 					else {
 						step.x += step.lft;
-						main.points += (step.x + ',' + step.y + ' ');
+						main.points += (Math.round(step.x) + ',' + Math.round(step.y) + ' ');
 					}
 					x = Math.round((index === 0) ? main.half : (index === (balance.length - 1)) ? (chart.width - main.half) : step.x);
 					y = Math.round(step.y + main.width);
@@ -131,9 +131,6 @@ function createLineGraph(param) {
 					if (index === lowest.index) {
 						lRel = [x, y];
 						lAbs = [(chart.left + x), (chart.top + y)];
-						// Zero pontok:
-						zRel = [[zero.half, (zero.top + main.width)], [(chart.width - zero.half), (zero.top + main.width)]];
-						zAbs = [[(chart.left + zRel[0][0]), (chart.top + zRel[0][1])], [(chart.left + zRel[1][0]), (chart.top + zRel[1][1])]];
 					}
 					// Legnagyobb, legkisebb tételek:
 					if (index === largest.index) {
@@ -156,6 +153,11 @@ function createLineGraph(param) {
 						x -= trnd.half;
 						tRel.push([x, y]);
 						tAbs.push([(chart.left + x), (chart.top + y)]);
+					}
+					// Zero pontok:
+					if (index === 0) {
+						zRel = [[zero.half, (zero.top + main.width)], [(chart.width - zero.half), (zero.top + main.width)]];
+						zAbs = [[(chart.left + zRel[0][0]), (chart.top + zRel[0][1])], [(chart.left + zRel[1][0]), (chart.top + zRel[1][1])]];
 					}
 				}
 			});
@@ -365,15 +367,13 @@ function createColumnGraph(param) {
 						sRel = [x, y];
 						sAbs = [(chart.left + x), (chart.top + y)];
 					}
-					// Átlag pontok:
 					if (index === 0) {
+						// Átlag vonal:
 						avrg.points = ((-avrg.half) + ',' + avrg.top + ' ' + (chart.width + avrg.half) + ',' + avrg.top);
 						// Átlag pontok:
 						aRel = [[avrg.half, avrg.top], [(chart.width - avrg.half), avrg.top]];
 						aAbs = [[(chart.left + aRel[0][0]), (chart.top + aRel[0][1])], [(chart.left + aRel[1][0]), (chart.top + aRel[1][1])]];
-					}
-					// Zéro vonal:
-					if (index === 0) {
+						// Zéro vonal:
 						zero.points = ((-zero.half) + ',' + chart.height + ' ' + (-zero.half) + ',' + zero.top +  ' ' + (chart.width + zero.half) + ',' + zero.top + ' ' + (chart.width + zero.half) + ',' + chart.height);
 						// Zero pontok:
 						zRel = [[zero.half, zero.top], [(chart.width - zero.half), zero.top]];
