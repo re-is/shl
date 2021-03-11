@@ -84,13 +84,13 @@ function createLineGraph(param) {
 	step.top = (chart.innerHeight / (highest.value - lowest.value));
 	zero.top = Math.round(chart.innerHeight + (lowest.value * step.top));
 
-	let mAbs, mRel, tAbs, tRel, zAbs, zRel,						// .push()
+	let mAbs, mRel, mrAbs, mrRel, tAbs, tRel, zAbs, zRel,		// .push()
 		hAbs, hRel, lAbs, lRel, rAbs, rRel, sAbs, sRel, x, y,	// [0,0]
 		sTop, sHeight, sBottom, valueRate;
 
 	// Alapértlmezés megadása a push funkcióhoz:
 	if (lineOk) {
-		mAbs = []; mRel = []; tAbs = []; tRel = []; zAbs = []; zRel = [];
+		mAbs = []; mRel = []; mrAbs = []; mrRel = []; tAbs = []; tRel = []; zAbs = []; zRel = [];
 		sTop = (chart.top + main.width);
 		sHeight = chart.innerHeight;
 		sBottom = (sTop + sHeight);
@@ -116,13 +116,16 @@ function createLineGraph(param) {
 					}
 					else {
 						step.x += step.lft;
-						main.points += (Math.round(step.x) + ',' + Math.round(step.y) + ' ');
+						main.points += (step.x + ',' + step.y + ' ');
 					}
-					x = Math.round((index === 0) ? main.half : (index === (balance.length - 1)) ? (chart.width - main.half) : step.x);
-					y = Math.round(step.y + main.width);
+					x = ((index === 0) ? main.half : (index === (balance.length - 1)) ? (chart.width - main.half) : step.x);
+					y = (step.y + main.width);
 					// Minden main pont:
 					mRel.push([x, y]);
 					mAbs.push([(chart.left + x), (chart.top + y)]);
+					// Kerekítettek:
+					mrRel.push([Math.round(x * 100000), Math.round(y * 100000)]);
+					mrAbs.push([Math.round((chart.left + x) * 100000), Math.round((chart.top + y) * 100000)]);
 					// Legmagasabb, legalacsonyabb pontok:
 					if (index === highest.index) {
 						hRel = [x, y];
@@ -199,42 +202,36 @@ function createLineGraph(param) {
 			largest	 : { abs: rAbs, rel: rRel },
 			smallest : { abs: sAbs, rel: sRel }
 		},
-		clientOffset: function() {
-			let rect = chart.elem.getBoundingClientRect();
-			return {
-				top: (chart.elem.offsetTop - rect.top),
-				left: (chart.elem.offsetLeft - rect.left)
-			}
-		},
 		valueByAbsPixel: function(pixel) {
 			if (!lineOk) return undefined;
+			pixel += (chart.elem.offsetTop - chart.elem.getBoundingClientRect().top);
 			if (pixel >= sBottom) return lowest.value;
 			else if (pixel <= sTop) return highest.value;
 			else return (((sBottom - pixel) * valueRate) + lowest.value);
 		},
-		relPointByDistance: function(x, y, d) {
-			if (!mRel) return undefined;
-			let f = undefined, xio, yio;
-			x -= chart.left;
-			y -= chart.top;
-			mRel.map(function(p) {
-				xio = ((x >= (p[0] - d)) && (x <= (p[0] + d)));
-				yio = ((y <= (p[1] + d)) && (y >= (p[1] - d)));
-				if (x && y && xio && yio) f = p;
-				if (x && y === false && xio) f = p[0];
-				if (x === false && y && yio) f = p[1];
+		relPointByLimit: function(x, y, l) {
+			let rect = chart.elem.getBoundingClientRect(), rectTop = (chart.elem.offsetTop - rect.top), rectLeft = (chart.elem.offsetLeft - rect.left);
+			if (x !== false) x = Math.round(((x + rectLeft) - chart.left) * 100000);
+			if (y !== false) y = Math.round(((y + rectTop) - chart.top) * 100000);
+			l = Math.round(l * 10000);
+			let f, top, left;
+			mrRel.map(function(p, i) {
+				top = (y === false ? true : ((y >= (p[1]-l)) && (y <= (p[1]+l))));
+				left = (x === false ? true : ((x >= (p[0]-l)) && (x <= (p[0]+l))));
+				if (top && left) f = mRel[i];
 			});
 			return f;
 		},
-		absPointByDistance: function(x, y, d) {
-			if (!mAbs) return undefined;
-			let f = undefined, xio, yio;
-			mAbs.map(function(p) {
-				xio = ((x >= (p[0] - d)) && (x <= (p[0] + d)));
-				yio = ((y <= (p[1] + d)) && (y >= (p[1] - d)));
-				if (x && y && xio && yio) f = p;
-				if (x && y === false && xio) f = p[0];
-				if (x === false && y && yio) f = p[1];
+		absPointByLimit: function(x, y, l) {
+			let rect = chart.elem.getBoundingClientRect(), rectTop = (chart.elem.offsetTop - rect.top), rectLeft = (chart.elem.offsetLeft - rect.left);
+			if (x !== false) x = Math.round((x + rectLeft) * 100000);
+			if (y !== false) y = Math.round((y + rectTop) * 100000);
+			l = Math.round(l * 10000);
+			let f, top, left;
+			mrAbs.map(function(p, i) {
+				top = (y === false ? true : ((y >= (p[1]-l)) && (y <= (p[1]+l))));
+				left = (x === false ? true : ((x >= (p[0]-l)) && (x <= (p[0]+l))));
+				if (top && left) f = [mAbs[i][0] - rectLeft, mAbs[i][1] - rectTop];
 			});
 			return f;
 		}
@@ -315,13 +312,13 @@ function createColumnGraph(param) {
 	avrg.top = (chart.height - ((((summary / items.length) - smallest.item) * step.top) + avrg.half));
 
 	// noinspection JSUnusedLocalSymbols
-	let mAbs, mRel, aAbs, aRel, zAbs, zRel,					// .push()
-		hAbs, hRel, lAbs, lRel, rAbs, rRel, sAbs, sRel,		// [0,0]
+	let mAbs, mRel, mrAbs, mrRel, aAbs, aRel, zAbs, zRel,		// .push()
+		hAbs, hRel, lAbs, lRel, rAbs, rRel, sAbs, sRel,			// [0,0]
 		sTop, sHeight, sBottom, valueRate, native, x, y, b, h;
 
 	// Alapértlmezés megadása a push funkcióhoz:
 	if (columnOk) {
-		mAbs = []; mRel = []; aAbs = []; aRel = []; zAbs = []; zRel = [];
+		mAbs = []; mRel = []; mrAbs = []; mrRel = []; aAbs = []; aRel = []; zAbs = []; zRel = [];
 		sTop = (chart.top + zero.half);
 		sHeight = chart.innerHeight;
 		sBottom = (sTop + sHeight);
@@ -358,6 +355,9 @@ function createColumnGraph(param) {
 					// Pontok megadása:
 					mRel.push([x, y]);
 					mAbs.push([(chart.left + x), (chart.top + y)]);
+					// Kerekítettek:
+					mrRel.push([Math.round(x * 100000), Math.round(y * 100000)]);
+					mrAbs.push([Math.round((chart.left + x) * 100000), Math.round((chart.top + y) * 100000)]);
 					// Legnagyobb, legkisebb tételek:
 					if (index === largest.index) {
 						rRel = [x, y];
@@ -416,42 +416,36 @@ function createColumnGraph(param) {
 			largest	 : { abs: rAbs, rel: rRel },
 			smallest : { abs: sAbs, rel: sRel }
 		},
-		clientOffset: function() {
-			let rect = chart.elem.getBoundingClientRect();
-			return {
-				top: (chart.elem.offsetTop - rect.top),
-				left: (chart.elem.offsetLeft - rect.left)
-			}
-		},
 		valueByAbsPixel: function(pixel) {
 			if (!columnOk) return undefined;
+			pixel += (chart.elem.offsetTop - chart.elem.getBoundingClientRect().top);
 			if (pixel >= sBottom) return smallest.item;
 			else if (pixel <= sTop) return largest.item;
 			else return (((sBottom - pixel) * valueRate) + smallest.item);
 		},
-		relPointByDistance: function(x, y, d) {
-			if (!mRel) return undefined;
-			let f = undefined, xio, yio;
-			x -= chart.left;
-			y -= chart.top;
-			mRel.map(function(p) {
-				xio = ((x >= (p[0] - d)) && (x <= (p[0] + d)));
-				yio = ((y <= (p[1] + d)) && (y >= (p[1] - d)));
-				if (x && y && xio && yio) f = p;
-				if (x && y === false && xio) f = p[0];
-				if (x === false && y && yio) f = p[1];
+		relPointByLimit: function(x, y, l) {
+			let rect = chart.elem.getBoundingClientRect(), rectTop = (chart.elem.offsetTop - rect.top), rectLeft = (chart.elem.offsetLeft - rect.left);
+			if (x !== false) x = Math.round(((x + rectLeft) - chart.left) * 100000);
+			if (y !== false) y = Math.round(((y + rectTop) - chart.top) * 100000);
+			l = Math.round(l * 10000);
+			let f, top, left;
+			mrRel.map(function(p, i) {
+				top = (y === false ? true : ((y >= (p[1]-l)) && (y <= (p[1]+l))));
+				left = (x === false ? true : ((x >= (p[0]-l)) && (x <= (p[0]+l))));
+				if (top && left) f = mRel[i];
 			});
 			return f;
 		},
-		absPointByDistance: function(x, y, d) {
-			if (!mAbs) return undefined;
-			let f = undefined, xio, yio;
-			mAbs.map(function(p) {
-				xio = ((x >= (p[0] - d)) && (x <= (p[0] + d)));
-				yio = ((y <= (p[1] + d)) && (y >= (p[1] - d)));
-				if (x && y && xio && yio) f = p;
-				if (x && y === false && xio) f = p[0];
-				if (x === false && y && yio) f = p[1];
+		absPointByLimit: function(x, y, l) {
+			let rect = chart.elem.getBoundingClientRect(), rectTop = (chart.elem.offsetTop - rect.top), rectLeft = (chart.elem.offsetLeft - rect.left);
+			if (x !== false) x = Math.round((x + rectLeft) * 100000);
+			if (y !== false) y = Math.round((y + rectTop) * 100000);
+			l = Math.round(l * 10000);
+			let f, top, left;
+			mrAbs.map(function(p, i) {
+				top = (y === false ? true : ((y >= (p[1]-l)) && (y <= (p[1]+l))));
+				left = (x === false ? true : ((x >= (p[0]-l)) && (x <= (p[0]+l))));
+				if (top && left) f = [mAbs[i][0] - rectLeft, mAbs[i][1] - rectTop];
 			});
 			return f;
 		}
