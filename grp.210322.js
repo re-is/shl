@@ -72,7 +72,6 @@ function createLineGraph(param) {
 				return value;
 			});
 
-
 	// Kerekítés --------------------------------------------------------------------->
 	chart.elem.style.marginTop	= ((Number(window.getComputedStyle(chart.elem).marginTop.replace('px', '')) - Number(chart.elem.getBoundingClientRect().top.toString().replace(/\d+(?!\.)\d+/, '0'))) + 'px');
 	chart.elem.style.marginLeft	= ((Number(window.getComputedStyle(chart.elem).marginLeft.replace('px', '')) - Number(chart.elem.getBoundingClientRect().left.toString().replace(/\d+(?!\.)\d+/, '0'))) + 'px');
